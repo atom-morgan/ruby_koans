@@ -14,6 +14,10 @@
 #   about_triangle_project_2.rb
 #
 def triangle(a, b, c)
+  raise TriangleError, "A triangle's side can't be negative" if (a <= 0 || b <= 0 || c <= 0)
+  raise TriangleError, "A side can't be greater than or equal to the sum of the other sides" \
+        if (a + b <= c || b + c <= a || a + c <= b)
+
   count = [ a == b, b == c, a == c ].select { |sides| sides }
   case count.size 
     when 0
