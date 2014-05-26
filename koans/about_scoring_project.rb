@@ -31,18 +31,28 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 
 def score(dice)
   score = 0
+  sorted_rolls = dice.sort
 
   return 0 if dice.empty?
-  if dice.size < 3
-    dice.each do |num|
+
+  loop do
+    num = sorted_rolls[0]
+    if sorted_rolls[0..2].uniq.count == 1 && sorted_rolls[0..2].length == 3
+      num == 1 ? score += 1000 : score += num * 100
+      sorted_rolls = sorted_rolls[3..-1]
+    else
       score += 100 if num == 1
       score += 50 if num == 5
+      sorted_rolls = sorted_rolls[1..-1]
     end
-    return score
+    break if sorted_rolls == nil
   end
+
+  score
 end
 
 class AboutScoringProject < Neo::Koan
+=begin
   def test_score_of_an_empty_list_is_zero
     assert_equal 0, score([])
   end
@@ -66,7 +76,7 @@ class AboutScoringProject < Neo::Koan
   def test_score_of_a_triple_1_is_1000
     assert_equal 1000, score([1,1,1])
   end
-
+=end
   def test_score_of_other_triples_is_100x
     assert_equal 200, score([2,2,2])
     assert_equal 300, score([3,3,3])
